@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-compatible" content="IE-edge"/>
+<meta name="viewport" content="width=device-width ,initial-scale=1.0"/>
+<title>Files upload features</title>
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+*{
+padding:0;
+margin:0;
+box-sizing:border-box;
+transition:all .5s .2s linear;
+font-family:'Poppins',sans-serif;
+}
+body{
+background:#2672f5;
+display:flex;
+flex-direction:column;
+min-height:100vh;
+justify-content:center;
+align-items:center;
+}
+.container{
+background:#eee;
+border-radius:7px;
+padding:40px 20px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:20px;
+}
+.container .tools{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:20px;
+}
+.container .img-file{
+max-height:50vh;
+max-width:60vw;
+display:none;
+}
+.container .check-drop{
+display:none;
+}
+.container label,.reset{
+border:solid 1px;
+border-radius:7px;
+padding:6px;
+background:none;
+outline:none;
+}
+.container label:hover{
+background:#2672f5;
+color:#eee;
+}
+#file-input{
+display:none;
+}
+.reset{
+color:#eee;
+margin-top:20px;
+transform:scale(0);
+opacity:0;
+}
+.show-el{
+height:auto;
+transform:scale(1);
+opacity:1;
+display:block;
+}
+.hidde-el{
+height:0;
+transform:scale(0);
+opacity:0;
+}
+.reset:hover{
+background:#eee;
+color:#2672f5;
+}
+</style>
+</head>
+<body>
+<section class="container">
+<img class="img-file">
+<div class="tools">
+<h2>Drag & Drop your file to here !</h2>
+<h2 class="check-drop">Drop your file !</h2>
+<h3>or</h3>
+<label for="file-input">Browse files</label>
+<input type="file" id="file-input">
+</div>
+</section>
+<button class="reset">Reset file</button>
+<script type="text/javascript">
+var fileInput = document.querySelector('#file-input');
+var resetBtn = document.querySelector('.reset');
+var img = document.querySelector('.img-file');
+var tools = document.querySelector('.tools');
+var checkDropText = document.querySelector('.check-drop');
+var fileR = new FileReader();
+var file;
+tools.ondragover=()=>{
+checkDropText.style.display='block';
+}
+tools.ondragleave=()=>{
+checkDropText.style.display='none';
+}
+tools.ondrop=(e)=>{
+e.preventDefault();
+file = event.dataTransfer.files[0];
+var fileType = file.type;
+var imageTypes = ["image/jpeg","image/jpg","image/png"];
+if(imageTypes.includes(fileType)){
+resetBtn.classList.add('show-el');
+img.style.display = 'block';
+tools.classList.add('hidde-el');
+fileR.readAsDataURL(file);
+fileR.onload = ()=>{
+img.src = fileR.result;
+};
+}else{
+alert('the type of the file is not valid like image')
+}
+}
+/*uploading btn tool*/
+fileInput.onchange =()=>{
+resetBtn.classList.add('show-el');
+img.style.display = 'block';
+tools.classList.add('hidde-el');
+fileR.readAsDataURL(fileInput.files[0]);
+fileR.onload = ()=>{
+img.src = fileR.result;
+};
+};
+resetBtn.onclick=()=>{
+img.style.display = 'none';
+tools.classList.remove('hidde-el');
+resetBtn.classList.remove('show-el');
+}
+</script>
+</body>
+</html>
